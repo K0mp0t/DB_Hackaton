@@ -42,8 +42,8 @@ def prepare_data(start: int, stop: int) -> pd.DataFrame:
     # X.to_csv('x_v1.csv', index=False)
     # y.to_csv('y_v1.csv', index=False)
 
-    X = pd.read_csv('x_v1.csv').iloc[start:stop]
-    y = pd.read_csv('y_v1.csv').iloc[start:stop]
+    X = pd.read_csv('computed_data/x_v1.csv').iloc[start:stop]
+    y = pd.read_csv('computed_data/y_v1.csv').iloc[start:stop]
     return X.to_numpy(), y.to_numpy()
 
 

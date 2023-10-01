@@ -36,20 +36,21 @@ def predict(
         background_tasks: BackgroundTasks
 ) -> JSONResponse:
     """
-    Endpoint for making predictions.
-    This function receives a POST request with a features_item, reads the features batch,
-    computes predictions using a model, and saves the predictions to a *rofl* database in the background.
-    Finally, it returns a JSON response with the predictions serialized as a JSON string.
+    Handle POST requests to '/predict' endpoint.
     Parameters:
-    - response (Response): The response object for setting the status code in case of an exception.
-    - features_item (Features): The features item received in the POST request.
-    - background_tasks (BackgroundTasks): The background tasks object for adding the task to save predictions
-    to the database.
+        response (Response): The response object.
+        interval (Features): The interval object containing start and stop values.
+        background_tasks (BackgroundTasks): The background tasks object.
     Returns:
-    - JSONResponse: The JSON response containing the predictions serialized as a JSON string.
+        JSONResponse: The JSON response containing the predictions and real values.
     Raises:
-    - Exception: If any error occurs during the prediction process, an exception is raised and a JSON response with the
-    error message is returned.
+        Exception: If an error occurs during the prediction process.
+    Notes:
+        - The 'read_json' function may be deprecated.
+        - The 'model_loader' module is used to load the model.
+        - The 'get_predictions' function is called to generate predictions.
+        - The 'save_predictions' function is called to save predictions in the background.
+        - If an exception occurs, a 500 status code is set and the error message is returned.
     """
     try:
         # hint: read_json may be deprecated
@@ -61,6 +62,11 @@ def predict(
         response.status_code = 500
         # TODO: loguru logger here
         return JSONResponse(content={'error_bruh': str(e)})
+
+
+@app.get('/evaluate')
+def evaluate():
+    raise NotImplementedError('src/evaluate not implemented do smth about it (or dont)')
 
 
 if __name__ == "__main__":
