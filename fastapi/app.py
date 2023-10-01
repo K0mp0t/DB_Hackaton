@@ -66,6 +66,7 @@ def predict(
 
 @app.get('/evaluate')
 def evaluate():
+    # Сюда-то можно и сделать eval!
     raise NotImplementedError('src/evaluate not implemented do smth about it (or dont)')
 
 
