@@ -65,13 +65,36 @@ def predict(
 
 
 @app.get('/evaluate')
-def evaluate():
+def evaluate() -> JSONResponse:
     # Сюда-то можно и сделать eval!
     raise NotImplementedError('src/evaluate not implemented do smth about it (or dont)')
 
 
+@app.get('/anomalies')
+def anomalies(
+        response: Response,
+        interval: Features,
+) -> JSONResponse:
+    """
+    Handle GET requests to '/anomalies' endpoint.
+    Parameters:
+        response (Response): The response object.
+        interval (Features): The interval object containing start and stop values.
+    Returns:
+        JSONResponse: The JSON response containing the lsit of anomalies.
+    Raises:
+        Exception: If an error occurs during the prediction process.
+    """
+    try:
+        raise NotImplementedError('src/anomalies not implemented do smth about it (or dont)')
+    except Exception as e:
+        response.status_code = 500
+        # TODO: loguru logger here
+        return JSONResponse(content={'error_bruh': str(e)})
+
+
 if __name__ == "__main__":
     # Run the server
-    # hint: see http://%host%:5000/docs# for more information
+    # see: http://%host%:5000/docs# for more information
     # change host to 0.0.0.0 if need
     uvicorn.run(app, host="localhost", port=5000, log_level="info")
