@@ -39,24 +39,39 @@ for uploaded_file in uploaded_files:
     real = np.random.randn(20)
     cause_of_troubles = 'URAl Airlines'
     cause_of_troubles_metrica = 'dead dead dead'
+
+
 headers = {
     'accept': 'application/json',
     'Content-Type': 'application/json',
 }
 
+input_start = st.number_input('Start', value=0, min_value=0, step=100)
+input_stop = st.number_input('Stop', value=100, max_value=90_000, step=100)
+if input_stop < input_start:
+    st.error('Stop must be greater than Start. pls change it')
+    st.stop()
+
 json_data = {
-    'start': 14000,
-    'stop': 15000,
+    'start': input_start,
+    'stop': input_stop,
 }
+
+if st.button('Predict on click'):
+    if 'response' in st.session_state:
+        del st.session_state['response']
+
 if 'response' not in st.session_state:
-    print(1)
     st.session_state['response'] = requests.post('http://localhost:5000/predict', headers=headers, json=json_data)
-    print(2)
-a = json.loads(st.session_state['response'].content)
-predicted = json.loads(a['predictions'])
-real = json.loads(a['real'])
+
+
+content = json.loads(st.session_state['response'].content)
+predicted = json.loads(content['predictions'])
+real = json.loads(content['real'])
+
 dataframe = pd.DataFrame().from_dict({'predictions': predicted, 'real': real})
 st.line_chart(dataframe, color=["#cf9117", "#94e5ff"])
+
 # Main part
 # hint:
 # use
@@ -67,6 +82,7 @@ st.line_chart(dataframe, color=["#cf9117", "#94e5ff"])
 #   - st.pyplot
 # plotly and altair available
 
+st.dataframe(dataframe[dataframe['predictions'] - dataframe['real'] > 10])
 st.write(f'Cause of troubles: {cause_of_troubles}')
 cols = st.columns((1, 1, 1, 1))
 for i, col in enumerate(cols):
